@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <!--react 环境必须要引入的三个包-->
+  <script src="./build/react.js"></script>
+  <script src="./build/react-dom.js"></script>
+  <script src="./build/browser.min.js"></script>
+</head>
+<body>
+
+<div id="example"></div>
+<script type="text/babel">
+  //自定义组件
+  var LoginMessage = React.createClass({
+    //初始化变量
+    getInitialState: function() {
+      return {
+        value: 'Runoob!',
+        nameflag:false,
+        emailflag:false
+      };
+    },
+    //onblur事件
+    handleblur: function(event) {
+      //判断是哪个input触发
+      switch(event.target.name){
+        //用户名
+        case 'username':
+
+          if(event.target.value.length>100){
+            console.log(event.target.nextElementSibling.innerText='文本太长');
+            this.nameflag = false;
+          }else{
+            this.nameflag = true;
+          }
+          break;
+        //邮箱
+        case 'email':
+          console.log(1)
+          var emailreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+          if(!emailreg.test(event.target.value)){
+            event.target.nextElementSibling.innerText='邮箱验证不通过'
+            this.emailflag = false;
+          }else{
+            this.emailflag = true;
+          }
+          break;
+        //城市
+        case 'city':
+              //todos
+          break;
+
+      }
+      console.log(event.target.name);
+    },
+    //onchange事件
+    handlechange:function(event){
+      //只有用户名改变时,动态展示用户名
+      if(event.target.name=='username'){
+        this.setState({value: event.target.value});
+      }else if(event.target.name=='email'){
+        this.s etState({email: event.target.value});
+      }else if(event.target.name=='city'){
+        this.setState({city: event.target.value});
+      }
+      event.target.nextElementSibling.innerText='';
+    },
+    handleclick:function(event){
+      //验证用户名和邮箱
+      if(this.emailflag&&this.nameflag){
+        //验证通过则可以点击调转到展示页面
+        console.log('验证通过')
+      }else{
+        alert("输入有误")
+      }
+//      console.log(this.emailflag);
+//      console.log(this.nameflag);
+    },
+    //模板
+    render: function() {
+      //用于动态展示用户名
+      var username = this.state.value;
+      var email=this.state.email;
+      console.log(email)
+      var city = this.state.city;
+      return <div>
+        <div id='show'>Hello[{username}]</div>
+        <form action="show.html" >
+        <div><span>name</span> <input name="username" value={username} type="text"  onChange={this.handlechange} onBlur={this.handleblur} /><span ></span></div>
+        <div><span>email</span> <input name="email"  value={email} type="text" onChange={this.handlechange} onBlur={this.handleblur} /><span ></span></div>
+        <div><span>city</span> <input name="city"  value={city} type="text"  onBlur={this.handleblur} /><span></span></div>
+          <div><input type="submit" value="login" onClick={this.handleclick} /></div>
+        </form>
+      </div>;
+    }
+  });
+  //渲染
+  ReactDOM.render(
+          <LoginMessage />,
+          document.getElementById('example')
+  );
+  
+</script>
+</body>
+</html>
+<!--<a href=""><button onClick={this.handleclick}>login</button></a>-->
